@@ -44,8 +44,9 @@
                 <td><?= $char['element']; ?></td>
                 <td><?= $char['role']; ?></td>
                 <td>
-                    <a href="#" style="color:red;">Hapus</a> | 
-                    <a href="#" style="color:blue;">Edit</a>
+                    <a href="/genpedia/public/admin/delete/<?= $char['id']; ?>" style="color:red;" onclick="return confirm('Yakin ingin menghapus data ini?');">Hapus</a> 
+                    | 
+                    <a href="/genpedia/public/admin/edit/<?= $char['id']; ?>" style="color:blue;">Edit</a>
                 </td>
             </tr>
             <?php endforeach; ?>
