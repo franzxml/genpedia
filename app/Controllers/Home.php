@@ -2,15 +2,17 @@
 
 namespace App\Controllers;
 
-class Home {
-    public function index($nama = 'Traveler', $pekerjaan = 'Adventurer')
+use App\Core\Controller; // <-- Wajib import ini
+
+class Home extends Controller {
+    public function index($nama = 'Traveler')
     {
-        echo "<h1>Halo, $nama!</h1>";
-        echo "<p>Job kamu adalah: $pekerjaan</p>";
-        echo "<p>Ini adalah method index di Home controller.</p>";
-    }
-    
-    public function test() {
-        echo "<h1>Ini halaman Test</h1>";
+        // Kita siapkan data yang mau dikirim ke View
+        $data['judul'] = 'Home Genpedia';
+        $data['nama'] = $nama;
+
+        // Panggil View 'home/index' dan kirim $data
+        // File view ini akan kita buat di langkah 3
+        $this->view('home/index', $data);
     }
 }
