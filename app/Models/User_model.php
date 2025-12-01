@@ -10,12 +10,27 @@ class User_model {
 
     public function __construct()
     {
-        $this->db = new Database(); // Instansiasi wrapper DB tadi
+        $this->db = new Database();
     }
 
     public function getAllCharacters()
     {
         $this->db->query('SELECT * FROM ' . $this->table);
         return $this->db->resultSet();
+    }
+
+    public function tambahDataKarakter($data)
+    {
+        $query = "INSERT INTO characters (name, element, role) 
+                  VALUES (:name, :element, :role)";
+        
+        $this->db->query($query);
+        $this->db->bind('name', $data['name']);
+        $this->db->bind('element', $data['element']);
+        $this->db->bind('role', $data['role']);
+
+        $this->db->execute();
+
+        return $this->db->rowCount();
     }
 }
