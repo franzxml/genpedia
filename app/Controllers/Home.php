@@ -2,17 +2,19 @@
 
 namespace App\Controllers;
 
-use App\Core\Controller; // <-- Wajib import ini
+use App\Core\Controller;
 
 class Home extends Controller {
-    public function index($nama = 'Traveler')
+    public function index()
     {
-        // Kita siapkan data yang mau dikirim ke View
-        $data['judul'] = 'Home Genpedia';
-        $data['nama'] = $nama;
+        $data['judul'] = 'Daftar Karakter';
+        
+        // Tambahkan ini supaya View tidak error saat memanggil $data['nama']
+        $data['nama'] = 'Traveler'; 
+        
+        // Panggil model dan method-nya untuk ambil data dari DB
+        $data['karakter'] = $this->model('User_model')->getAllCharacters();
 
-        // Panggil View 'home/index' dan kirim $data
-        // File view ini akan kita buat di langkah 3
         $this->view('home/index', $data);
     }
 }
