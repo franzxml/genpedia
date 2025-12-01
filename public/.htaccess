@@ -1,0 +1,7 @@
+Options -Multiviews
+RewriteEngine On
+
+# Jika file/folder fisik tidak ada, arahkan ke index.php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
