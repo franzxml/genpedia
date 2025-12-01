@@ -19,7 +19,6 @@ class User_model {
         return $this->db->resultSet();
     }
 
-    // Ambil 1 data berdasarkan ID (Untuk Edit)
     public function getCharacterById($id)
     {
         $this->db->query('SELECT * FROM ' . $this->table . ' WHERE id=:id');
@@ -29,13 +28,16 @@ class User_model {
 
     public function tambahDataKarakter($data)
     {
-        $query = "INSERT INTO characters (name, element, role) 
-                  VALUES (:name, :element, :role)";
+        // Query disesuaikan dengan kolom baru
+        $query = "INSERT INTO characters (name, element, role, portrait, description) 
+                  VALUES (:name, :element, :role, :portrait, :description)";
         
         $this->db->query($query);
         $this->db->bind('name', $data['name']);
         $this->db->bind('element', $data['element']);
         $this->db->bind('role', $data['role']);
+        $this->db->bind('portrait', $data['portrait']);
+        $this->db->bind('description', $data['description']);
 
         $this->db->execute();
         return $this->db->rowCount();
@@ -46,14 +48,18 @@ class User_model {
         $query = "UPDATE characters SET
                     name = :name,
                     element = :element,
-                    role = :role
+                    role = :role,
+                    portrait = :portrait,
+                    description = :description
                   WHERE id = :id";
         
         $this->db->query($query);
         $this->db->bind('name', $data['name']);
         $this->db->bind('element', $data['element']);
         $this->db->bind('role', $data['role']);
-        $this->db->bind('id', $data['id']); // ID dikirim dari hidden input
+        $this->db->bind('portrait', $data['portrait']);
+        $this->db->bind('description', $data['description']);
+        $this->db->bind('id', $data['id']);
 
         $this->db->execute();
         return $this->db->rowCount();

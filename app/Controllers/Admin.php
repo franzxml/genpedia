@@ -21,24 +21,27 @@ class Admin extends Controller {
 
     public function store()
     {
-        if ($this->model('User_model')->tambahDataKarakter($_POST) > 0) {
+        // Gabungkan $_POST dengan hasil upload foto
+        $data = $_POST;
+        $data['portrait'] = $this->uploadFoto(); // Panggil fungsi upload
+
+        if (!$data['portrait']) return; // Jika upload gagal (salah ekstensi dll)
+
+        if ($this->model('User_model')->tambahDataKarakter($data) > 0) {
             header('Location: /genpedia/public/admin');
             exit;
         }
     }
 
-    // --- FITUR BARU ---
-
-    // Hapus Data
     public function delete($id)
     {
+        // Hapus juga filenya (opsional, tahap lanjut)
         if ($this->model('User_model')->hapusDataKarakter($id) > 0) {
             header('Location: /genpedia/public/admin');
             exit;
         }
     }
 
-    // Tampilkan Halaman Edit
     public function edit($id)
     {
         $data['judul'] = 'Ubah Data Karakter';
@@ -46,16 +49,66 @@ class Admin extends Controller {
         $this->view('admin/edit', $data);
     }
 
-    // Proses Update Data
     public function update()
     {
-        if ($this->model('User_model')->ubahDataKarakter($_POST) > 0) {
+        $data = $_POST;
+        $fotoLama = $_POST['fotoLama'];
+
+        // Cek apakah user pilih gambar baru atau tidak
+        if ($_FILES['portrait']['error'] === 4) {
+            $data['portrait'] = $fotoLama; // Pakai foto lama
+        } else {
+            $data['portrait'] = $this->uploadFoto(); // Upload foto baru
+        }
+
+        if ($this->model('User_model')->ubahDataKarakter($data) > 0) {
             header('Location: /genpedia/public/admin');
             exit;
         } else {
-            // Kalau tidak ada perubahan, tetap kembalikan ke admin
+            // Tetap redirect meski tidak ada row yg berubah
             header('Location: /genpedia/public/admin');
             exit;
         }
+    }
+
+    // --- Fungsi Tambahan untuk Upload Gambar ---
+    public function uploadFoto()
+    {
+        $namaFile = $_FILES['portrait']['name'];
+        $ukuranFile = $_FILES['portrait']['size'];
+        $error = $_FILES['portrait']['error'];
+        $tmpName = $_FILES['portrait']['tmp_name'];
+
+        // Cek apakah ada gambar yg diupload (untuk create)
+        if ($error === 4) {
+            // Set default image jika user tidak upload saat create
+            return 'default.png'; 
+        }
+
+        // Cek ekstensi file
+        $ekstensiGambarValid = ['jpg', 'jpeg', 'png', 'webp'];
+        $ekstensiGambar = explode('.', $namaFile);
+        $ekstensiGambar = strtolower(end($ekstensiGambar));
+
+        if (!in_array($ekstensiGambar, $ekstensiGambarValid)) {
+            echo "<script>alert('Yang anda upload bukan gambar!');</script>";
+            return false;
+        }
+
+        // Cek ukuran (Max 2MB)
+        if ($ukuranFile > 2000000) {
+            echo "<script>alert('Ukuran gambar terlalu besar!');</script>";
+            return false;
+        }
+
+        // Generate nama baru agar tidak duplikat
+        $namaFileBaru = uniqid();
+        $namaFileBaru .= '.';
+        $namaFileBaru .= $ekstensiGambar;
+
+        // Pindahkan ke folder public/img
+        move_uploaded_file($tmpName, '../public/img/' . $namaFileBaru);
+
+        return $namaFileBaru;
     }
 }
