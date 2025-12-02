@@ -8,40 +8,36 @@ class Admin extends Controller {
     
     public function index()
     {
-        // Redirect ke halaman Master Data dulu biar Admin ngisi itu
         header('Location: ' . BASEURL . '/admin/master');
         exit;
     }
 
-    // --- HALAMAN UTAMA ADMIN: MASTER DATA ---
     public function master()
     {
         $data['judul'] = 'Master Data - Genpedia';
         $data['weapons'] = $this->model('User_model')->getAllWeapons();
         $data['artifacts'] = $this->model('User_model')->getAllArtifacts();
+        $data['roles'] = $this->model('User_model')->getAllRoles(); // Ambil data role
         $this->view('admin/master', $data);
     }
 
-    // Action Tambah Master Data (Weapon/Artifact)
     public function storeMaster()
     {
-        $type = $_POST['type']; // 'weapons' atau 'artifacts'
-        // Validasi simpel
-        if ($type == 'weapons' || $type == 'artifacts') {
+        $type = $_POST['type']; // 'weapons', 'artifacts', atau 'roles'
+        if (in_array($type, ['weapons', 'artifacts', 'roles'])) {
             $this->model('User_model')->tambahMaster($type, $_POST);
         }
         header('Location: ' . BASEURL . '/admin/master');
         exit;
     }
 
-    // --- CREATE CHARACTER ---
     public function create()
     {
         $data['judul'] = 'Tambah Karakter Baru';
-        // Kirim data master ke view biar bisa dipilih
         $data['weapons'] = $this->model('User_model')->getAllWeapons();
         $data['artifacts'] = $this->model('User_model')->getAllArtifacts();
-        $data['characters'] = $this->model('User_model')->getAllCharacters(); // Untuk pilih tim
+        $data['roles'] = $this->model('User_model')->getAllRoles(); // Kirim role
+        $data['characters'] = $this->model('User_model')->getAllCharacters();
         
         $this->view('admin/create', $data);
     }
@@ -59,12 +55,11 @@ class Admin extends Controller {
         $data['judul'] = 'Ubah Data Karakter';
         $data['karakter'] = $this->model('User_model')->getCharacterById($id);
         
-        // Kirim data master juga
         $data['weapons'] = $this->model('User_model')->getAllWeapons();
         $data['artifacts'] = $this->model('User_model')->getAllArtifacts();
+        $data['roles'] = $this->model('User_model')->getAllRoles(); // Kirim role
         $data['characters'] = $this->model('User_model')->getAllCharacters();
 
-        // Mapping ID yang sudah terpilih biar checkbox tercentang
         $data['selected_weapons'] = array_column($data['karakter']['weapons'], 'id');
         $data['selected_artifacts'] = array_column($data['karakter']['artifacts'], 'id');
         $data['selected_teams'] = array_column($data['karakter']['teams'], 'id');

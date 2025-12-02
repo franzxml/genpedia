@@ -81,7 +81,8 @@
         /* PREVIEW GAMBAR */
         .img-preview-container {
             display: flex; gap: 20px; margin-top: 5px;
-            background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; 
+            border: 1px solid rgba(255,255,255,0.05);
         }
         .preview-box { text-align: center; }
         .preview-box img { 
@@ -90,7 +91,7 @@
         }
         .preview-box span { display: block; font-size: 11px; color: #777; }
 
-        /* --- SELECTION GRID (CSS BARU) --- */
+        /* --- SELECTION GRID --- */
         .select-grid { 
             display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; 
             max-height: 250px; overflow-y: auto; 
@@ -99,11 +100,8 @@
         }
         
         .select-item { position: relative; cursor: pointer; }
-        
-        /* Sembunyikan checkbox asli */
         .select-item input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
         
-        /* Gambar Item */
         .select-item img { 
             width: 100%; aspect-ratio: 1/1; object-fit: cover;
             border-radius: 8px; border: 2px solid transparent; 
@@ -117,10 +115,9 @@
             text-overflow: ellipsis; white-space: nowrap; transition: 0.2s;
         }
         
-        /* Efek saat dipilih */
         .select-item input:checked + img { 
-            border-color: #d3bc8e; opacity: 1; filter: grayscale(0%);
-            box-shadow: 0 0 15px rgba(211, 188, 142, 0.3);
+            border-color: #fff; opacity: 1; filter: grayscale(0%);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
             transform: scale(1.05);
         }
         .select-item input:checked ~ span { color: #fff; font-weight: bold; text-shadow: 0 0 5px #000; }
@@ -152,17 +149,29 @@
         <a href="<?= BASEURL; ?>/admin/delete/<?= $data['karakter']['id']; ?>" class="btn-delete" onclick="return confirm('Yakin hapus karakter ini? Data yang dihapus tidak bisa kembali.')">DELETE</a>
     </div>
     
-    <form action="<?= BASEURL; ?>/admin/update" method="POST">
+    <form action="<?= BASEURL; ?>/admin/update" method="POST" id="formEntry">
         <input type="hidden" name="id" value="<?= $data['karakter']['id']; ?>">
 
         <div class="row">
             <div class="form-group">
                 <label>Character Name</label>
-                <input type="text" name="name" value="<?= $data['karakter']['name']; ?>" required>
+                <input type="text" name="name" value="<?= $data['karakter']['name']; ?>" required autocomplete="off">
             </div>
+            
             <div class="form-group">
                 <label>Role</label>
-                <input type="text" name="role" value="<?= $data['karakter']['role']; ?>" required>
+                <select name="role" required>
+                    <option value="" disabled>-- Select Role --</option>
+                    <?php if(!empty($data['roles'])): ?>
+                        <?php foreach($data['roles'] as $role) : ?>
+                            <option value="<?= $role['name']; ?>" <?= ($data['karakter']['role'] == $role['name']) ? 'selected' : ''; ?>>
+                                <?= $role['name']; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <option value="" disabled>No roles found. Add in Master Data.</option>
+                    <?php endif; ?>
+                </select>
             </div>
         </div>
 
@@ -170,27 +179,29 @@
             <label>Vision / Element</label>
             <select name="element">
                 <?php $elements = ['Pyro', 'Hydro', 'Anemo', 'Electro', 'Dendro', 'Cryo', 'Geo']; foreach($elements as $el) : ?>
-                    <option value="<?= $el; ?>" <?= ($data['karakter']['element'] == $el) ? 'selected' : ''; ?>><?= $el; ?></option>
+                    <option value="<?= $el; ?>" <?= ($data['karakter']['element'] == $el) ? 'selected' : ''; ?>>
+                        <?= $el; ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
         </div>
 
         <div class="form-group">
             <label>Icon URL (Portrait)</label>
-            <input type="text" name="icon_url" value="<?= $data['karakter']['icon_url']; ?>" required placeholder="https://...">
+            <input type="text" name="icon_url" id="iconUrl" value="<?= $data['karakter']['icon_url']; ?>" required placeholder="https://...">
         </div>
         <div class="form-group">
             <label>Namecard URL (Background)</label>
-            <input type="text" name="namecard_url" value="<?= $data['karakter']['namecard_url']; ?>" required placeholder="https://...">
+            <input type="text" name="namecard_url" id="namecardUrl" value="<?= $data['karakter']['namecard_url']; ?>" required placeholder="https://...">
         </div>
 
-        <div class="img-preview-container">
+        <div class="img-preview-container" id="previewContainer">
             <div class="preview-box">
-                <img src="<?= $data['karakter']['icon_url']; ?>" alt="Icon">
+                <img id="prevIcon" src="<?= $data['karakter']['icon_url']; ?>" alt="Icon">
                 <span>Icon</span>
             </div>
             <div class="preview-box" style="flex: 1; text-align: left;">
-                <img src="<?= $data['karakter']['namecard_url']; ?>" style="width: 100%; height: 60px; aspect-ratio: auto;" alt="Namecard">
+                <img id="prevNamecard" src="<?= $data['karakter']['namecard_url']; ?>" style="width: 100%; height: 60px; aspect-ratio: auto;" alt="Namecard">
                 <span style="text-align: center;">Namecard Preview</span>
             </div>
         </div>
@@ -202,7 +213,7 @@
             <div class="select-grid">
                 <?php if(empty($data['weapons'])): ?>
                     <p style="color: #666; font-size: 12px; grid-column: 1/-1; text-align: center;">
-                        Belum ada data senjata. Silakan input di menu <a href="<?= BASEURL; ?>/admin/master" style="color:#d3bc8e">Master Data</a>.
+                        No weapons data. Please add in <a href="<?= BASEURL; ?>/admin/master" style="color:#fff">Master Data</a>.
                     </p>
                 <?php else: ?>
                     <?php foreach($data['weapons'] as $w) : ?>
@@ -222,7 +233,7 @@
             <div class="select-grid">
                 <?php if(empty($data['artifacts'])): ?>
                     <p style="color: #666; font-size: 12px; grid-column: 1/-1; text-align: center;">
-                        Belum ada data artifak. Input di menu Master Data.
+                        No artifacts data. Add in Master Data.
                     </p>
                 <?php else: ?>
                     <?php foreach($data['artifacts'] as $a) : ?>
@@ -240,22 +251,28 @@
         <div class="form-group">
             <label>Best Teammates (Select other characters)</label>
             <div class="select-grid">
-                <?php foreach($data['characters'] as $c) : ?>
-                    <?php if($c['id'] != $data['karakter']['id']) : ?>
-                        <label class="select-item">
-                            <input type="checkbox" name="teams[]" value="<?= $c['id']; ?>"
-                                <?= in_array($c['id'], $data['selected_teams']) ? 'checked' : ''; ?>>
-                            <img src="<?= $c['icon_url']; ?>" title="<?= $c['name']; ?>">
-                            <span><?= $c['name']; ?></span>
-                        </label>
-                    <?php endif; ?>
-                <?php endforeach; ?>
+                <?php if(empty($data['characters'])): ?>
+                    <p style="color: #666; font-size: 12px; grid-column: 1/-1; text-align: center;">
+                        No other characters available yet.
+                    </p>
+                <?php else: ?>
+                    <?php foreach($data['characters'] as $c) : ?>
+                        <?php if($c['id'] != $data['karakter']['id']) : ?>
+                            <label class="select-item">
+                                <input type="checkbox" name="teams[]" value="<?= $c['id']; ?>"
+                                    <?= in_array($c['id'], $data['selected_teams']) ? 'checked' : ''; ?>>
+                                <img src="<?= $c['icon_url']; ?>" title="<?= $c['name']; ?>">
+                                <span><?= $c['name']; ?></span>
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
 
         <div class="form-group">
             <label>Description / Overview</label>
-            <textarea name="description" rows="4" placeholder="Tulis deskripsi singkat karakter..."><?= $data['karakter']['description']; ?></textarea>
+            <textarea name="description" rows="4" placeholder="Character lore or brief guide..."><?= $data['karakter']['description']; ?></textarea>
         </div>
 
         <div class="actions">
@@ -264,6 +281,30 @@
         </div>
     </form>
 </div>
+
+<script>
+    const iconInput = document.getElementById('iconUrl');
+    const namecardInput = document.getElementById('namecardUrl');
+    const previewContainer = document.getElementById('previewContainer');
+    const prevIcon = document.getElementById('prevIcon');
+    const prevNamecard = document.getElementById('prevNamecard');
+
+    function updatePreview() {
+        const iconVal = iconInput.value;
+        const namecardVal = namecardInput.value;
+
+        if (iconVal || namecardVal) {
+            previewContainer.style.display = 'flex';
+            if(iconVal) prevIcon.src = iconVal;
+            if(namecardVal) prevNamecard.src = namecardVal;
+        } else {
+            previewContainer.style.display = 'none';
+        }
+    }
+
+    iconInput.addEventListener('input', updatePreview);
+    namecardInput.addEventListener('input', updatePreview);
+</script>
 
 </body>
 </html>
