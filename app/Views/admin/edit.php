@@ -2,60 +2,267 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $data['judul']; ?></title>
+    <title>Edit - <?= $data['karakter']['name']; ?></title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: sans-serif; padding: 50px; background-color: #f4f4f4; }
-        .card { background: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        label { display: block; margin: 15px 0 5px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { margin-top: 20px; width: 100%; padding: 10px; background: #5a4da3; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        .back-link { display: block; margin-top: 15px; text-align: center; text-decoration: none; color: #666; }
-        .img-preview { margin-top: 10px; max-width: 100px; border-radius: 5px; }
+        /* --- RESET & BASIC STYLE --- */
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Nunito', sans-serif; margin: 0; padding: 0;
+            background-color: #0c0f1d;
+            background-image: 
+                radial-gradient(white 1px, transparent 1px),
+                radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px);
+            background-size: 550px 550px, 350px 350px; 
+            background-position: 0 0, 40px 60px;
+            background-attachment: fixed;
+            color: #ece5d8; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            padding: 50px 20px;
+        }
+
+        /* --- GLASS CARD CONTAINER --- */
+        .card {
+            background: rgba(12, 15, 29, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* HEADER */
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px; margin-bottom: 30px;
+        }
+        h2 { 
+            font-family: 'Cinzel', serif; margin: 0; color: #fff; font-size: 28px; 
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+        .btn-delete {
+            color: #ff6b6b; text-decoration: none; font-weight: 700; font-size: 14px;
+            border: 1px solid rgba(255, 107, 107, 0.3); padding: 8px 20px; border-radius: 50px;
+            transition: 0.3s;
+        }
+        .btn-delete:hover { background: rgba(255, 107, 107, 0.1); border-color: #ff6b6b; }
+
+        /* FORM ELEMENTS */
+        form { display: grid; gap: 25px; }
+        
+        .form-group { display: flex; flex-direction: column; gap: 10px; }
+        
+        label { 
+            font-size: 13px; font-weight: 700; color: #94a3b8; 
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        input, select, textarea {
+            background: rgba(30, 34, 50, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 20px;
+            color: #fff; font-family: 'Nunito', sans-serif; font-size: 15px;
+            outline: none; transition: 0.3s;
+            width: 100%;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(30, 34, 50, 0.9);
+            box-shadow: 0 0 15px rgba(255,255,255,0.05);
+        }
+
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* PREVIEW GAMBAR */
+        .img-preview-container {
+            display: flex; gap: 20px; margin-top: 5px;
+            background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .preview-box { text-align: center; }
+        .preview-box img { 
+            height: 60px; object-fit: cover; border-radius: 8px; 
+            border: 1px solid rgba(255,255,255,0.2); margin-bottom: 5px; background: #000;
+        }
+        .preview-box span { display: block; font-size: 11px; color: #777; }
+
+        /* --- SELECTION GRID (CSS BARU) --- */
+        .select-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; 
+            max-height: 250px; overflow-y: auto; 
+            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .select-item { position: relative; cursor: pointer; }
+        
+        /* Sembunyikan checkbox asli */
+        .select-item input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+        
+        /* Gambar Item */
+        .select-item img { 
+            width: 100%; aspect-ratio: 1/1; object-fit: cover;
+            border-radius: 8px; border: 2px solid transparent; 
+            opacity: 0.4; transition: 0.2s; filter: grayscale(80%);
+            background: #1e1e1e;
+        }
+        
+        .select-item span { 
+            display: block; font-size: 11px; text-align: center; 
+            color: #666; margin-top: 4px; overflow: hidden; 
+            text-overflow: ellipsis; white-space: nowrap; transition: 0.2s;
+        }
+        
+        /* Efek saat dipilih */
+        .select-item input:checked + img { 
+            border-color: #d3bc8e; opacity: 1; filter: grayscale(0%);
+            box-shadow: 0 0 15px rgba(211, 188, 142, 0.3);
+            transform: scale(1.05);
+        }
+        .select-item input:checked ~ span { color: #fff; font-weight: bold; text-shadow: 0 0 5px #000; }
+        .select-item:hover img { opacity: 0.8; }
+
+        /* TOMBOL ACTION */
+        .actions { margin-top: 30px; display: flex; gap: 15px; }
+        button {
+            flex: 1; background: #fff; color: #0c0f1d;
+            padding: 14px; border: none; border-radius: 50px;
+            font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; transition: 0.3s;
+        }
+        button:hover { background: #e2e8f0; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(255,255,255,0.2); }
+        .btn-cancel {
+            flex: 0; min-width: 140px; text-align: center; display: flex; align-items: center; justify-content: center;
+            background: transparent; color: #aaa; border: 1px solid rgba(255,255,255,0.2);
+            text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 14px;
+        }
+        .btn-cancel:hover { background: rgba(255,255,255,0.05); color: #fff; border-color: #fff; }
+
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>Ubah Data Karakter</h2>
+    <div class="header">
+        <h2>Edit Character</h2>
+        <a href="<?= BASEURL; ?>/admin/delete/<?= $data['karakter']['id']; ?>" class="btn-delete" onclick="return confirm('Yakin hapus karakter ini? Data yang dihapus tidak bisa kembali.')">DELETE</a>
+    </div>
     
-    <form action="/genpedia/public/admin/update" method="POST" enctype="multipart/form-data">
+    <form action="<?= BASEURL; ?>/admin/update" method="POST">
         <input type="hidden" name="id" value="<?= $data['karakter']['id']; ?>">
-        
-        <input type="hidden" name="fotoLama" value="<?= $data['karakter']['portrait']; ?>">
 
-        <label for="name">Nama Karakter</label>
-        <input type="text" id="name" name="name" value="<?= $data['karakter']['name']; ?>" required>
-
-        <label for="element">Vision (Elemen)</label>
-        <select id="element" name="element">
-            <?php 
-                $elements = ['Pyro', 'Hydro', 'Anemo', 'Electro', 'Dendro', 'Cryo', 'Geo'];
-                foreach($elements as $el) : 
-            ?>
-                <option value="<?= $el; ?>" <?= ($data['karakter']['element'] == $el) ? 'selected' : ''; ?>>
-                    <?= $el; ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-
-        <label for="role">Role</label>
-        <input type="text" id="role" name="role" value="<?= $data['karakter']['role']; ?>" required>
-
-        <label for="portrait">Foto Karakter</label>
-        <div style="margin-bottom: 10px;">
-            <img src="/genpedia/public/img/<?= $data['karakter']['portrait']; ?>" alt="Preview" class="img-preview">
-            <small style="display:block; color:#666;">Foto saat ini</small>
+        <div class="row">
+            <div class="form-group">
+                <label>Character Name</label>
+                <input type="text" name="name" value="<?= $data['karakter']['name']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <input type="text" name="role" value="<?= $data['karakter']['role']; ?>" required>
+            </div>
         </div>
-        <input type="file" id="portrait" name="portrait">
 
-        <label for="description">Guide / Deskripsi</label>
-        <textarea id="description" name="description" rows="5"><?= $data['karakter']['description']; ?></textarea>
+        <div class="form-group">
+            <label>Vision / Element</label>
+            <select name="element">
+                <?php $elements = ['Pyro', 'Hydro', 'Anemo', 'Electro', 'Dendro', 'Cryo', 'Geo']; foreach($elements as $el) : ?>
+                    <option value="<?= $el; ?>" <?= ($data['karakter']['element'] == $el) ? 'selected' : ''; ?>><?= $el; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
-        <button type="submit">Update Data</button>
+        <div class="form-group">
+            <label>Icon URL (Portrait)</label>
+            <input type="text" name="icon_url" value="<?= $data['karakter']['icon_url']; ?>" required placeholder="https://...">
+        </div>
+        <div class="form-group">
+            <label>Namecard URL (Background)</label>
+            <input type="text" name="namecard_url" value="<?= $data['karakter']['namecard_url']; ?>" required placeholder="https://...">
+        </div>
+
+        <div class="img-preview-container">
+            <div class="preview-box">
+                <img src="<?= $data['karakter']['icon_url']; ?>" alt="Icon">
+                <span>Icon</span>
+            </div>
+            <div class="preview-box" style="flex: 1; text-align: left;">
+                <img src="<?= $data['karakter']['namecard_url']; ?>" style="width: 100%; height: 60px; aspect-ratio: auto;" alt="Namecard">
+                <span style="text-align: center;">Namecard Preview</span>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;">
+
+        <div class="form-group">
+            <label>Best Weapons (Select multiple)</label>
+            <div class="select-grid">
+                <?php if(empty($data['weapons'])): ?>
+                    <p style="color: #666; font-size: 12px; grid-column: 1/-1; text-align: center;">
+                        Belum ada data senjata. Silakan input di menu <a href="<?= BASEURL; ?>/admin/master" style="color:#d3bc8e">Master Data</a>.
+                    </p>
+                <?php else: ?>
+                    <?php foreach($data['weapons'] as $w) : ?>
+                        <label class="select-item">
+                            <input type="checkbox" name="weapons[]" value="<?= $w['id']; ?>" 
+                                <?= in_array($w['id'], $data['selected_weapons']) ? 'checked' : ''; ?>>
+                            <img src="<?= $w['icon_url']; ?>" title="<?= $w['name']; ?>">
+                            <span><?= $w['name']; ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Best Artifacts (Select multiple)</label>
+            <div class="select-grid">
+                <?php if(empty($data['artifacts'])): ?>
+                    <p style="color: #666; font-size: 12px; grid-column: 1/-1; text-align: center;">
+                        Belum ada data artifak. Input di menu Master Data.
+                    </p>
+                <?php else: ?>
+                    <?php foreach($data['artifacts'] as $a) : ?>
+                        <label class="select-item">
+                            <input type="checkbox" name="artifacts[]" value="<?= $a['id']; ?>"
+                                <?= in_array($a['id'], $data['selected_artifacts']) ? 'checked' : ''; ?>>
+                            <img src="<?= $a['icon_url']; ?>" title="<?= $a['name']; ?>">
+                            <span><?= $a['name']; ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Best Teammates (Select other characters)</label>
+            <div class="select-grid">
+                <?php foreach($data['characters'] as $c) : ?>
+                    <?php if($c['id'] != $data['karakter']['id']) : ?>
+                        <label class="select-item">
+                            <input type="checkbox" name="teams[]" value="<?= $c['id']; ?>"
+                                <?= in_array($c['id'], $data['selected_teams']) ? 'checked' : ''; ?>>
+                            <img src="<?= $c['icon_url']; ?>" title="<?= $c['name']; ?>">
+                            <span><?= $c['name']; ?></span>
+                        </label>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Description / Overview</label>
+            <textarea name="description" rows="4" placeholder="Tulis deskripsi singkat karakter..."><?= $data['karakter']['description']; ?></textarea>
+        </div>
+
+        <div class="actions">
+            <a href="<?= BASEURL; ?>/home/detail/<?= $data['karakter']['id']; ?>" class="btn-cancel">CANCEL</a>
+            <button type="submit">SAVE CHANGES</button>
+        </div>
     </form>
-
-    <a href="/genpedia/public/admin" class="back-link">Batal</a>
 </div>
 
 </body>

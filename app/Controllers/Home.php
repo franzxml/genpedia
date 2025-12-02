@@ -12,18 +12,18 @@ class Home extends Controller {
         $this->view('home/index', $data);
     }
 
-    // Fitur Baru: Menampilkan halaman detail/guide
+    // Method Baru: Halaman Detail
     public function detail($id)
     {
-        $data['judul'] = 'Detail Karakter';
         $data['karakter'] = $this->model('User_model')->getCharacterById($id);
         
-        // Jika ID ngawur/tidak ditemukan, kembalikan ke home
+        // Cek jika data tidak ditemukan (misal ID ngawur)
         if (!$data['karakter']) {
-            header('Location: /genpedia/public');
+            header('Location: ' . BASEURL);
             exit;
         }
 
+        $data['judul'] = $data['karakter']['name'] . ' Build Guide - Genpedia';
         $this->view('home/detail', $data);
     }
 }

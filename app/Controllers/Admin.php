@@ -8,36 +8,48 @@ class Admin extends Controller {
     
     public function index()
     {
-        $data['judul'] = 'Dashboard Admin';
-        $data['karakter'] = $this->model('User_model')->getAllCharacters();
-        $this->view('admin/index', $data);
+        // Redirect ke halaman Master Data dulu biar Admin ngisi itu
+        header('Location: ' . BASEURL . '/admin/master');
+        exit;
     }
 
+    // --- HALAMAN UTAMA ADMIN: MASTER DATA ---
+    public function master()
+    {
+        $data['judul'] = 'Master Data - Genpedia';
+        $data['weapons'] = $this->model('User_model')->getAllWeapons();
+        $data['artifacts'] = $this->model('User_model')->getAllArtifacts();
+        $this->view('admin/master', $data);
+    }
+
+    // Action Tambah Master Data (Weapon/Artifact)
+    public function storeMaster()
+    {
+        $type = $_POST['type']; // 'weapons' atau 'artifacts'
+        // Validasi simpel
+        if ($type == 'weapons' || $type == 'artifacts') {
+            $this->model('User_model')->tambahMaster($type, $_POST);
+        }
+        header('Location: ' . BASEURL . '/admin/master');
+        exit;
+    }
+
+    // --- CREATE CHARACTER ---
     public function create()
     {
         $data['judul'] = 'Tambah Karakter Baru';
+        // Kirim data master ke view biar bisa dipilih
+        $data['weapons'] = $this->model('User_model')->getAllWeapons();
+        $data['artifacts'] = $this->model('User_model')->getAllArtifacts();
+        $data['characters'] = $this->model('User_model')->getAllCharacters(); // Untuk pilih tim
+        
         $this->view('admin/create', $data);
     }
 
     public function store()
     {
-        // Gabungkan $_POST dengan hasil upload foto
-        $data = $_POST;
-        $data['portrait'] = $this->uploadFoto(); // Panggil fungsi upload
-
-        if (!$data['portrait']) return; // Jika upload gagal (salah ekstensi dll)
-
-        if ($this->model('User_model')->tambahDataKarakter($data) > 0) {
-            header('Location: /genpedia/public/admin');
-            exit;
-        }
-    }
-
-    public function delete($id)
-    {
-        // Hapus juga filenya (opsional, tahap lanjut)
-        if ($this->model('User_model')->hapusDataKarakter($id) > 0) {
-            header('Location: /genpedia/public/admin');
+        if ($this->model('User_model')->tambahDataKarakter($_POST) > 0) {
+            header('Location: ' . BASEURL . '/home');
             exit;
         }
     }
@@ -46,69 +58,36 @@ class Admin extends Controller {
     {
         $data['judul'] = 'Ubah Data Karakter';
         $data['karakter'] = $this->model('User_model')->getCharacterById($id);
+        
+        // Kirim data master juga
+        $data['weapons'] = $this->model('User_model')->getAllWeapons();
+        $data['artifacts'] = $this->model('User_model')->getAllArtifacts();
+        $data['characters'] = $this->model('User_model')->getAllCharacters();
+
+        // Mapping ID yang sudah terpilih biar checkbox tercentang
+        $data['selected_weapons'] = array_column($data['karakter']['weapons'], 'id');
+        $data['selected_artifacts'] = array_column($data['karakter']['artifacts'], 'id');
+        $data['selected_teams'] = array_column($data['karakter']['teams'], 'id');
+
         $this->view('admin/edit', $data);
     }
 
     public function update()
     {
-        $data = $_POST;
-        $fotoLama = $_POST['fotoLama'];
-
-        // Cek apakah user pilih gambar baru atau tidak
-        if ($_FILES['portrait']['error'] === 4) {
-            $data['portrait'] = $fotoLama; // Pakai foto lama
-        } else {
-            $data['portrait'] = $this->uploadFoto(); // Upload foto baru
-        }
-
-        if ($this->model('User_model')->ubahDataKarakter($data) > 0) {
-            header('Location: /genpedia/public/admin');
+        if ($this->model('User_model')->ubahDataKarakter($_POST) > 0) {
+            header('Location: ' . BASEURL . '/home/detail/' . $_POST['id']);
             exit;
         } else {
-            // Tetap redirect meski tidak ada row yg berubah
-            header('Location: /genpedia/public/admin');
+            header('Location: ' . BASEURL . '/home');
             exit;
         }
     }
 
-    // --- Fungsi Tambahan untuk Upload Gambar ---
-    public function uploadFoto()
+    public function delete($id)
     {
-        $namaFile = $_FILES['portrait']['name'];
-        $ukuranFile = $_FILES['portrait']['size'];
-        $error = $_FILES['portrait']['error'];
-        $tmpName = $_FILES['portrait']['tmp_name'];
-
-        // Cek apakah ada gambar yg diupload (untuk create)
-        if ($error === 4) {
-            // Set default image jika user tidak upload saat create
-            return 'default.png'; 
+        if ($this->model('User_model')->hapusDataKarakter($id) > 0) {
+            header('Location: ' . BASEURL . '/home');
+            exit;
         }
-
-        // Cek ekstensi file
-        $ekstensiGambarValid = ['jpg', 'jpeg', 'png', 'webp'];
-        $ekstensiGambar = explode('.', $namaFile);
-        $ekstensiGambar = strtolower(end($ekstensiGambar));
-
-        if (!in_array($ekstensiGambar, $ekstensiGambarValid)) {
-            echo "<script>alert('Yang anda upload bukan gambar!');</script>";
-            return false;
-        }
-
-        // Cek ukuran (Max 2MB)
-        if ($ukuranFile > 2000000) {
-            echo "<script>alert('Ukuran gambar terlalu besar!');</script>";
-            return false;
-        }
-
-        // Generate nama baru agar tidak duplikat
-        $namaFileBaru = uniqid();
-        $namaFileBaru .= '.';
-        $namaFileBaru .= $ekstensiGambar;
-
-        // Pindahkan ke folder public/img
-        move_uploaded_file($tmpName, '../public/img/' . $namaFileBaru);
-
-        return $namaFileBaru;
     }
 }
