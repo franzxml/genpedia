@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('btn-explore');
+    console.log('Genpedia App Ready!');
     
-    if(btn) {
-        btn.addEventListener('click', function() {
-            alert('Fitur ini akan segera hadir! Data Karakter sedang disiapkan.');
+    // Nanti kita akan tambahkan logika pencarian atau filter di sini
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    if(menuToggle && navLinks) {
+        menuToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('slide'); // Siapkan class slide untuk mobile menu nanti
         });
     }
-    
-    console.log('Genpedia App Ready!');
 });

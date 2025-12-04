@@ -1,10 +1,6 @@
 <footer>
         <div class="container footer-content">
             
-            <div class="developer-section">
-                Dikembangkan oleh <span class="developer-name">@franzxml</span>
-            </div>
-
             <ul class="footer-contacts">
                 <li class="contact-item">
                     <span class="contact-label">Instagram</span>

@@ -4,11 +4,10 @@ class Home extends Controller {
     {
         $data['judul'] = 'Genpedia - Beranda';
         
-        // Memanggil Header
-        $this->view('templates/header', $data);
-        // Memanggil Isi Halaman
-        $this->view('home/index', $data);
-        // Memanggil Footer
-        $this->view('templates/footer');
+        // Urutan pemanggilan views yang baru:
+        $this->view('templates/header', $data); // 1. Head & Body start
+        $this->view('templates/navbar');        // 2. Navbar Component
+        $this->view('home/index', $data);       // 3. Main Content
+        $this->view('templates/footer');        // 4. Footer & Scripts
     }
 }

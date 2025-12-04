@@ -1,0 +1,110 @@
+/* =========================================
+   2. NAVBAR STYLES
+   ========================================= */
+
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #eaeaea;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 1rem 0;
+}
+
+.nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a202c;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+/* Navigasi Links */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 2rem; 
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+/* Styling teks menu saat Active */
+.nav-links a.active {
+    color: #1a202c;
+    font-weight: 600;
+}
+
+.nav-links a:hover {
+    color: #1a202c;
+}
+
+/* --- LOGIKA UNDERLINE --- */
+
+/* Base Line (Lebar 0) */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0; 
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #1a202c;
+    transition: width 0.3s ease;
+}
+
+/* Active State */
+.nav-links a.active::after {
+    width: 100%;
+}
+
+/* Fix Hover Logic: Hide active line when hovering parent */
+.nav-links:hover a.active::after {
+    width: 0;
+}
+
+/* Show line on hovered item */
+.nav-links a:hover::after,
+.nav-links:hover a.active:hover::after {
+    width: 100%;
+}
+/* --- END LOGIKA --- */
+
+/* Hamburger Menu (Mobile) */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin-bottom: 4px;
+    border-radius: 2px;
+}
+
+/* Responsive Navbar */
+@media screen and (max-width: 768px) {
+    .nav-links {
+        display: none; 
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+}
