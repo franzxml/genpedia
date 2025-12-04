@@ -45,3 +45,101 @@ main {
         padding: 0 20px;
     }
 }
+/* =========================================
+   4. HOME PAGE STYLES (Tambahan)
+   ========================================= */
+
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 60px 0 40px; /* Atas Bawah Kiri Kanan */
+    background-color: #fff;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1a202c;
+    letter-spacing: -1px;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    color: #64748b;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Category Grid */
+.category-section {
+    padding-bottom: 60px;
+}
+
+.category-grid {
+    display: grid;
+    /* Grid otomatis: Minimal lebar 300px, kalau muat jejer ke samping */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Card Styling */
+.category-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    gap: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.category-card:hover {
+    transform: translateY(-5px); /* Efek naik dikit */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    border-color: #cbd5e1;
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    /* Background bulat tipis di belakang icon */
+    background-color: #f8f9fa;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.card-content h3 {
+    color: #1a202c;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.card-content p {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.card-arrow {
+    margin-left: auto; /* Dorong panah ke pojok kanan */
+    color: #94a3b8;
+    font-size: 1.5rem;
+    font-weight: 300;
+    transition: transform 0.2s ease;
+}
+
+.category-card:hover .card-arrow {
+    transform: translateX(5px); /* Panah bergerak ke kanan saat hover */
+    color: #1a202c;
+}
