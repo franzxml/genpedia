@@ -1,2 +1,3 @@
 <?php
-define('BASEURL', 'http://localhost/genpedia/public');
+// Pastikan tidak ada slash di akhir
+define('BASEURL', 'http://genpedia.test');
