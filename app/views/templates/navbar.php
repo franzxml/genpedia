@@ -1,5 +1,8 @@
 <?php
-// Mendapatkan URL saat ini untuk penentuan class 'active'
+/**
+ * Komponen Navbar
+ * PHP Logic di atas digunakan untuk mendeteksi halaman aktif
+ */
 $uri = $_SERVER['REQUEST_URI'];
 ?>
 
@@ -16,22 +19,22 @@ $uri = $_SERVER['REQUEST_URI'];
             </li>
             
             <li>
-                <a href="<?= BASEURL; ?>/karakter" 
-                   class="<?= (strpos($uri, '/karakter') !== false) ? 'active' : ''; ?>">
+                <a href="<?= BASEURL; ?>/characters" 
+                   class="<?= (strpos($uri, '/characters') !== false) ? 'active' : ''; ?>">
                    Karakter
                 </a>
             </li>
             
             <li>
-                <a href="<?= BASEURL; ?>/senjata" 
-                   class="<?= (strpos($uri, '/senjata') !== false) ? 'active' : ''; ?>">
+                <a href="<?= BASEURL; ?>/weapons" 
+                   class="<?= (strpos($uri, '/weapons') !== false) ? 'active' : ''; ?>">
                    Senjata
                 </a>
             </li>
             
             <li>
-                <a href="<?= BASEURL; ?>/artefak" 
-                   class="<?= (strpos($uri, '/artefak') !== false) ? 'active' : ''; ?>">
+                <a href="<?= BASEURL; ?>/artifacts" 
+                   class="<?= (strpos($uri, '/artifacts') !== false) ? 'active' : ''; ?>">
                    Artefak
                 </a>
             </li>

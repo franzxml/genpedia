@@ -1,13 +1,19 @@
 <?php
+/**
+ * Controller Halaman Utama (Beranda)
+ */
 class Home extends Controller {
+    
+    // Method default (index)
     public function index()
     {
+        // Menyiapkan data untuk dikirim ke view
         $data['judul'] = 'Genpedia - Beranda';
         
-        // Urutan pemanggilan views yang baru:
-        $this->view('templates/header', $data); // 1. Head & Body start
-        $this->view('templates/navbar');        // 2. Navbar Component
-        $this->view('home/index', $data);       // 3. Main Content
-        $this->view('templates/footer');        // 4. Footer & Scripts
+        // Memuat komponen tampilan secara berurutan
+        $this->view('templates/header', $data); // Head HTML & CSS
+        $this->view('templates/navbar');        // Navigasi Atas
+        $this->view('home/index', $data);       // Konten Utama
+        $this->view('templates/footer');        // Footer & Scripts
     }
 }

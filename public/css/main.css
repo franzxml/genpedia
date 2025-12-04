@@ -1,31 +1,33 @@
 /* =========================================
-   1. MAIN / BASE STYLES
+   1. MAIN / BASE STYLES (Pengaturan Global)
    ========================================= */
 
-/* Reset & Base */
+/* Reset CSS & Box Model */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Tipografi & Warna Dasar Body */
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #f8f9fa;
-    color: #2c3e50;
+    background-color: #f8f9fa; /* Abu-abu terang */
+    color: #2c3e50; /* Biru gelap keabu-abuan (Teks Utama) */
     line-height: 1.6;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Flex Column untuk Sticky Footer */
     min-height: 100vh;
 }
 
-/* Layout Utilities */
+/* Utilitas Layout: Container Tengah */
 .container {
     width: 90%;
     max-width: 1000px;
     margin: 0 auto;
 }
 
+/* Utilitas Layout: Container Lebar Penuh */
 .container-fluid {
     width: 100%;
     max-width: 100%;
@@ -33,13 +35,13 @@ body {
     margin: 0;
 }
 
-/* Main Content Area */
+/* Area Konten Utama */
 main {
-    flex: 1; /* Agar footer terdorong ke bawah */
+    flex: 1; /* Mengisi ruang kosong agar footer terdorong ke bawah */
     padding: 40px 0;
 }
 
-/* Responsive Utilities Global */
+/* Responsif: Mobile */
 @media screen and (max-width: 768px) {
     .container-fluid {
         padding: 0 20px;
@@ -47,10 +49,10 @@ main {
 }
 
 /* =========================================
-   4. HOME PAGE STYLES
+   2. HOME PAGE STYLES (Halaman Beranda)
    ========================================= */
 
-/* Hero Section */
+/* Bagian Hero (Sambutan) */
 .hero-section {
     text-align: center;
     padding: 60px 0 40px; 
@@ -75,18 +77,19 @@ main {
     line-height: 1.6;
 }
 
-/* Category Grid */
+/* Grid Kategori */
 .category-section {
     padding-bottom: 60px;
 }
 
 .category-grid {
     display: grid;
+    /* Grid Responsif: Kolom menyesuaikan layar, minimal 300px */
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
 }
 
-/* Card Styling */
+/* Styling Kartu Kategori */
 .category-card {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
@@ -95,46 +98,50 @@ main {
     text-decoration: none;
     display: flex;
     align-items: center;
-    transition: all 0.3s ease;
     gap: 1.5rem;
-    box-shadow: none; /* Flat design */
+    transition: all 0.3s ease;
+    box-shadow: none; /* Desain Flat */
 }
 
+/* Efek Hover Kartu */
 .category-card:hover {
-    transform: translateY(-5px); 
+    transform: translateY(-5px); /* Geser ke atas */
     border-color: #cbd5e1;
     box-shadow: none;
 }
 
-/* Card Icon (SVG Style) */
+/* Ikon Kartu (SVG Wrapper) */
 .card-icon {
     width: 56px;
     height: 56px;
-    background-color: transparent;
+    background-color: transparent; /* Transparan */
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 12px; 
-    color: #475569; 
+    color: #475569; /* Warna ikon normal */
     transition: all 0.3s ease;
 }
 
+/* Pengaturan ukuran SVG */
 .card-icon svg {
     width: 28px;
     height: 28px;
     transition: transform 0.3s ease;
 }
 
-/* Hover Effects */
+/* Efek Hover Ikon */
 .category-card:hover .card-icon {
     background-color: transparent; 
-    color: #1a202c; 
+    color: #1a202c; /* Berubah jadi hitam saat hover */
 }
 
+/* Efek Skala SVG saat Hover */
 .category-card:hover .card-icon svg {
     transform: scale(1.15);
 }
 
+/* Teks Konten Kartu */
 .card-content h3 {
     color: #1a202c;
     font-size: 1.25rem;
@@ -148,8 +155,9 @@ main {
     margin: 0;
 }
 
+/* Panah Navigasi di Kartu */
 .card-arrow {
-    margin-left: auto;
+    margin-left: auto; /* Dorong ke kanan mentok */
     color: #94a3b8;
     font-size: 1.5rem;
     font-weight: 300;
@@ -157,19 +165,19 @@ main {
 }
 
 .category-card:hover .card-arrow {
-    transform: translateX(5px);
+    transform: translateX(5px); /* Geser panah saat hover */
     color: #1a202c;
 }
 
 /* =========================================
-   5. EMPTY STATE STYLES (NEW)
+   3. EMPTY STATE STYLES (Halaman Kosong)
    ========================================= */
 .empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 60vh; /* Mengambil 60% tinggi layar agar terlihat di tengah */
+    min-height: 60vh; /* Tengah Vertikal */
     text-align: center;
 }
 

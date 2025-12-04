@@ -1,5 +1,5 @@
 /* =========================================
-   2. NAVBAR STYLES
+   NAVBAR STYLES
    ========================================= */
 
 .navbar {
@@ -7,7 +7,7 @@
     border-bottom: 1px solid #eaeaea;
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 1000; /* Pastikan di atas elemen lain */
     padding: 1rem 0;
 }
 
@@ -17,6 +17,7 @@
     align-items: center;
 }
 
+/* Logo Brand */
 .brand-logo {
     font-size: 1.25rem;
     font-weight: 700;
@@ -25,13 +26,14 @@
     letter-spacing: -0.5px;
 }
 
-/* Navigasi Links */
+/* Container Link Navigasi */
 .nav-links {
     list-style: none;
     display: flex;
     gap: 2rem; 
 }
 
+/* Styling Teks Link */
 .nav-links a {
     text-decoration: none;
     color: #64748b;
@@ -42,7 +44,7 @@
     padding-bottom: 5px;
 }
 
-/* Styling teks menu saat Active */
+/* State Aktif & Hover Teks */
 .nav-links a.active {
     color: #1a202c;
     font-weight: 600;
@@ -52,9 +54,9 @@
     color: #1a202c;
 }
 
-/* --- LOGIKA UNDERLINE --- */
+/* --- LOGIKA UNDERLINE ANIMATION --- */
 
-/* Base Line (Lebar 0) */
+/* Garis Dasar (Lebar 0, tidak terlihat) */
 .nav-links a::after {
     content: '';
     position: absolute;
@@ -66,26 +68,26 @@
     transition: width 0.3s ease;
 }
 
-/* Active State */
+/* State Aktif: Garis muncul penuh */
 .nav-links a.active::after {
     width: 100%;
 }
 
-/* Fix Hover Logic: Hide active line when hovering parent */
+/* Fix Logika Hover: Sembunyikan garis aktif saat user hover menu lain */
 .nav-links:hover a.active::after {
     width: 0;
 }
 
-/* Show line on hovered item */
+/* Tampilkan garis hanya pada menu yang sedang di-hover */
 .nav-links a:hover::after,
 .nav-links:hover a.active:hover::after {
     width: 100%;
 }
-/* --- END LOGIKA --- */
+/* --- AKHIR LOGIKA UNDERLINE --- */
 
-/* Hamburger Menu (Mobile) */
+/* Tombol Hamburger (Mobile) */
 .menu-toggle {
-    display: none;
+    display: none; /* Sembunyikan di desktop */
     flex-direction: column;
     cursor: pointer;
 }
@@ -98,13 +100,14 @@
     border-radius: 2px;
 }
 
-/* Responsive Navbar */
+/* Responsif: Tampilan Mobile */
 @media screen and (max-width: 768px) {
     .nav-links {
-        display: none; 
+        display: none; /* Sembunyikan menu desktop */
+        /* Logic JS diperlukan untuk menampilkan menu mobile */
     }
 
     .menu-toggle {
-        display: flex;
+        display: flex; /* Tampilkan tombol hamburger */
     }
 }
