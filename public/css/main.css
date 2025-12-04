@@ -1,194 +1,191 @@
 /* =========================================
-   1. MAIN / BASE STYLES (Pengaturan Global)
+   GENPEDIA THEME: TEYVAT EDITION
    ========================================= */
 
-/* Reset CSS & Box Model */
+/* Reset & Base */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Tipografi & Warna Dasar Body */
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #f8f9fa; /* Abu-abu terang */
-    color: #2c3e50; /* Biru gelap keabu-abuan (Teks Utama) */
+    font-family: 'Inter', sans-serif;
+    /* Ganti URL ini dengan gambar background lokal Anda jika sudah ada */
+    background: url('https://images2.alphacoders.com/110/1109233.jpg') no-repeat center center fixed; 
+    background-size: cover;
+    color: #4a3b2a; /* Warna Coklat Tua */
     line-height: 1.6;
     display: flex;
-    flex-direction: column; /* Flex Column untuk Sticky Footer */
+    flex-direction: column;
     min-height: 100vh;
 }
 
-/* Utilitas Layout: Container Tengah */
+/* Layout Utilities */
 .container {
     width: 90%;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
-/* Utilitas Layout: Container Lebar Penuh */
-.container-fluid {
-    width: 100%;
-    max-width: 100%;
-    padding: 0 50px; 
-    margin: 0;
-}
-
-/* Area Konten Utama */
 main {
-    flex: 1; /* Mengisi ruang kosong agar footer terdorong ke bawah */
+    flex: 1;
     padding: 40px 0;
-}
-
-/* Responsif: Mobile */
-@media screen and (max-width: 768px) {
-    .container-fluid {
-        padding: 0 20px;
-    }
+    /* Overlay gradient agar tulisan terbaca jika background terlalu terang */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4)); 
 }
 
 /* =========================================
-   2. HOME PAGE STYLES (Halaman Beranda)
+   HERO SECTION (Judul Besar)
    ========================================= */
-
-/* Bagian Hero (Sambutan) */
 .hero-section {
     text-align: center;
-    padding: 60px 0 40px; 
-    background-color: #fff;
+    padding: 80px 0 50px; 
     margin-bottom: 2rem;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: none;
+    background: transparent;
+}
+
+.hero-decoration-top {
+    font-size: 2rem;
+    color: #ffd700; /* Emas */
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    margin-bottom: 10px;
 }
 
 .hero-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #1a202c;
-    letter-spacing: -1px;
+    font-family: 'Cinzel', serif; /* Font Fantasi */
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #ffeaa7; /* Warna Krem/Emas Muda */
+    text-shadow: 
+        2px 2px 0px #3d2c20, 
+        0 0 20px rgba(0,0,0,0.5); /* Outline Coklat & Glow */
     margin-bottom: 1rem;
+    letter-spacing: 2px;
 }
 
 .hero-subtitle {
-    color: #64748b;
+    color: #f1f2f6;
     font-size: 1.1rem;
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
-    line-height: 1.6;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.8); /* Shadow hitam agar terbaca di langit */
+    font-weight: 500;
 }
 
-/* Grid Kategori */
+/* =========================================
+   CATEGORY CARDS (SCROLL PAPER STYLE)
+   ========================================= */
 .category-section {
-    padding-bottom: 60px;
+    padding-bottom: 80px;
 }
 
 .category-grid {
     display: grid;
-    /* Grid Responsif: Kolom menyesuaikan layar, minimal 300px */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
 }
 
-/* Styling Kartu Kategori */
 .category-card {
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 2rem;
+    /* Efek Kertas Gulungan */
+    background: #fdf5e6; /* Warna dasar kertas */
+    background-image: linear-gradient(to right, #e6d0b3 2%, #fdf5e6 10%, #fdf5e6 90%, #e6d0b3 98%);
+    border-top: 6px solid #cfaa76; /* Pinggiran Kayu Atas */
+    border-bottom: 6px solid #cfaa76; /* Pinggiran Kayu Bawah */
+    border-radius: 4px;
+    
+    padding: 1.5rem;
     text-decoration: none;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 1.5rem;
-    transition: all 0.3s ease;
-    box-shadow: none; /* Desain Flat */
+    position: relative;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+    overflow: hidden; /* Agar gambar tidak keluar kotak */
+    height: 180px;
 }
 
-/* Efek Hover Kartu */
+/* Efek Gulungan di Kiri dan Kanan */
+.category-card::before, .category-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 12px;
+    background: #deb887;
+    border: 1px solid #8b4513;
+    border-radius: 20px;
+    z-index: 2;
+}
+.category-card::before { left: -6px; }
+.category-card::after { right: -6px; }
+
+/* Hover Effect */
 .category-card:hover {
-    transform: translateY(-5px); /* Geser ke atas */
-    border-color: #cbd5e1;
-    box-shadow: none;
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2); /* Glow Emas */
+    border-color: #d4af37;
 }
 
-/* Ikon Kartu (SVG Wrapper) */
-.card-icon {
-    width: 56px;
-    height: 56px;
-    background-color: transparent; /* Transparan */
+/* Layout Kiri (Teks & Ikon) */
+.card-left {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    max-width: 60%;
+}
+
+/* Ikon Elemen Pojok */
+.card-icon-element {
+    width: 40px;
+    height: 40px;
+    background: #4a3b2a;
+    color: #fff;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px; 
-    color: #475569; /* Warna ikon normal */
-    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    border: 2px solid #d4af37;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Pengaturan ukuran SVG */
-.card-icon svg {
-    width: 28px;
-    height: 28px;
-    transition: transform 0.3s ease;
-}
-
-/* Efek Hover Ikon */
-.category-card:hover .card-icon {
-    background-color: transparent; 
-    color: #1a202c; /* Berubah jadi hitam saat hover */
-}
-
-/* Efek Skala SVG saat Hover */
-.category-card:hover .card-icon svg {
-    transform: scale(1.15);
-}
-
-/* Teks Konten Kartu */
 .card-content h3 {
-    color: #1a202c;
-    font-size: 1.25rem;
+    font-family: 'Cinzel', serif;
+    color: #3e2723;
+    font-size: 1.5rem;
     font-weight: 700;
-    margin-bottom: 0.25rem;
 }
 
 .card-content p {
-    color: #64748b;
-    font-size: 0.9rem;
-    margin: 0;
+    color: #5d4037;
+    font-size: 0.85rem;
+    line-height: 1.3;
 }
 
-/* Panah Navigasi di Kartu */
-.card-arrow {
-    margin-left: auto; /* Dorong ke kanan mentok */
-    color: #94a3b8;
-    font-size: 1.5rem;
-    font-weight: 300;
-    transition: transform 0.2s ease;
-}
-
-.category-card:hover .card-arrow {
-    transform: translateX(5px); /* Geser panah saat hover */
-    color: #1a202c;
-}
-
-/* =========================================
-   3. EMPTY STATE STYLES (Halaman Kosong)
-   ========================================= */
-.empty-state {
+/* Layout Kanan (Gambar Karakter) */
+.card-right {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 45%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 60vh; /* Tengah Vertikal */
-    text-align: center;
+    align-items: flex-end;
+    justify-content: flex-end;
 }
 
-.empty-state h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1a202c;
-    margin-bottom: 1rem;
+.card-char-img {
+    height: 110%; /* Biar agak besar */
+    object-fit: cover;
+    mask-image: linear-gradient(to left, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to left, black 60%, transparent 100%);
 }
 
-.empty-state p {
-    color: #64748b;
-    font-size: 1.1rem;
+.weapon-img {
+    transform: rotate(45deg) scale(0.8) translateY(-20px);
 }

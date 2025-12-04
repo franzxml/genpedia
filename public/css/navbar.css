@@ -1,113 +1,79 @@
 /* =========================================
-   NAVBAR STYLES
+   NAVBAR: WOODEN STYLE
    ========================================= */
 
 .navbar {
-    background-color: #ffffff;
-    border-bottom: 1px solid #eaeaea;
+    background-color: #3e2723; /* Coklat Kayu Gelap */
+    border-bottom: 3px solid #d4af37; /* Border Emas */
     position: sticky;
     top: 0;
-    z-index: 1000; /* Pastikan di atas elemen lain */
-    padding: 1rem 0;
+    z-index: 1000;
+    padding: 0.8rem 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
 .nav-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
-/* Logo Brand */
+/* Dekorasi Diamond/Bintang di tengah bawah Navbar */
+.navbar::after {
+    content: '✦';
+    position: absolute;
+    bottom: -18px; /* Keluar sedikit dari navbar */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #3e2723;
+    color: #b3e5fc; /* Biru muda glowing */
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #d4af37;
+    border-radius: 50%; /* Bulat */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    z-index: 1001;
+}
+
 .brand-logo {
-    font-size: 1.25rem;
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
     font-weight: 700;
-    color: #1a202c;
+    color: #ffe082; /* Emas Muda */
+    text-shadow: 1px 1px 0 #000;
     text-decoration: none;
-    letter-spacing: -0.5px;
 }
 
-/* Container Link Navigasi */
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 2rem; 
+    gap: 2.5rem; 
 }
 
-/* Styling Teks Link */
 .nav-links a {
     text-decoration: none;
-    color: #64748b;
-    font-weight: 500;
+    color: #d7ccc8; /* Abu kecoklatan */
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
     font-size: 0.95rem;
     transition: color 0.3s ease;
-    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
 }
 
-/* State Aktif & Hover Teks */
-.nav-links a.active {
-    color: #1a202c;
-    font-weight: 600;
+/* Hover Emas */
+.nav-links a:hover, .nav-links a.active {
+    color: #fff;
+    border-bottom-color: #ffd700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
 }
 
-.nav-links a:hover {
-    color: #1a202c;
-}
-
-/* --- LOGIKA UNDERLINE ANIMATION --- */
-
-/* Garis Dasar (Lebar 0, tidak terlihat) */
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    width: 0; 
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #1a202c;
-    transition: width 0.3s ease;
-}
-
-/* State Aktif: Garis muncul penuh */
-.nav-links a.active::after {
-    width: 100%;
-}
-
-/* Fix Logika Hover: Sembunyikan garis aktif saat user hover menu lain */
-.nav-links:hover a.active::after {
-    width: 0;
-}
-
-/* Tampilkan garis hanya pada menu yang sedang di-hover */
-.nav-links a:hover::after,
-.nav-links:hover a.active:hover::after {
-    width: 100%;
-}
-/* --- AKHIR LOGIKA UNDERLINE --- */
-
-/* Tombol Hamburger (Mobile) */
-.menu-toggle {
-    display: none; /* Sembunyikan di desktop */
-    flex-direction: column;
-    cursor: pointer;
-}
-
-.menu-toggle span {
-    width: 25px;
-    height: 3px;
-    background-color: #333;
-    margin-bottom: 4px;
-    border-radius: 2px;
-}
-
-/* Responsif: Tampilan Mobile */
-@media screen and (max-width: 768px) {
-    .nav-links {
-        display: none; /* Sembunyikan menu desktop */
-        /* Logic JS diperlukan untuk menampilkan menu mobile */
-    }
-
-    .menu-toggle {
-        display: flex; /* Tampilkan tombol hamburger */
-    }
-}
+/* Hapus style underline lama */
+.nav-links a::after { content: none; }
