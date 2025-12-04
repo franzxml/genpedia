@@ -4,36 +4,137 @@
     <meta charset="UTF-8">
     <title><?= $data['judul']; ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* (Style sama persis dengan yang lalu) */
+        /* --- RESET & BASIC STYLE --- */
         * { box-sizing: border-box; }
-        body { font-family: 'Nunito', sans-serif; margin: 0; padding: 0; background-color: #0c0f1d; background-image: radial-gradient(white 1px, transparent 1px), radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px); background-size: 550px 550px, 350px 350px; background-position: 0 0, 40px 60px; background-attachment: fixed; color: #ece5d8; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 50px 20px; }
-        .card { background: rgba(12, 15, 29, 0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 40px; width: 100%; max-width: 900px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .header { border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 30px; text-align: center; }
-        h2 { font-family: 'Cinzel', serif; margin: 0; color: #fff; font-size: 28px; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        body { 
+            font-family: 'Nunito', sans-serif; margin: 0; padding: 0;
+            background-color: #0c0f1d;
+            background-image: 
+                radial-gradient(white 1px, transparent 1px),
+                radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px);
+            background-size: 550px 550px, 350px 350px; 
+            background-position: 0 0, 40px 60px;
+            background-attachment: fixed;
+            color: #ece5d8; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            padding: 50px 20px;
+        }
+
+        /* --- GLASS CARD CONTAINER --- */
+        .card {
+            background: rgba(12, 15, 29, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* HEADER */
+        .header {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px; margin-bottom: 30px;
+            text-align: center;
+        }
+        h2 { 
+            font-family: 'Cinzel', serif; margin: 0; color: #fff; font-size: 28px; 
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+
+        /* FORM ELEMENTS */
         form { display: grid; gap: 25px; }
+        
         .form-group { display: flex; flex-direction: column; gap: 10px; }
-        label { font-size: 13px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
-        input, select, textarea { background: rgba(30, 34, 50, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 12px 20px; color: #fff; font-family: 'Nunito', sans-serif; font-size: 15px; outline: none; transition: 0.3s; width: 100%; }
-        input:focus, select:focus, textarea:focus { border-color: rgba(255, 255, 255, 0.5); background: rgba(30, 34, 50, 0.9); box-shadow: 0 0 15px rgba(255,255,255,0.05); }
+        
+        label { 
+            font-size: 13px; font-weight: 700; color: #94a3b8; 
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* REVISI: Hapus Custom Arrow pada Select */
+        input, select, textarea {
+            background: rgba(30, 34, 50, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 20px;
+            color: #fff; font-family: 'Nunito', sans-serif; font-size: 15px;
+            outline: none; transition: 0.3s;
+            width: 100%;
+        }
+        
+        /* Kembalikan Option ke warna gelap agar terbaca di dropdown */
+        option { background: #1e1e2e; color: white; }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(30, 34, 50, 0.9);
+            box-shadow: 0 0 15px rgba(255,255,255,0.05);
+        }
+
         .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .img-preview-container { display: none; gap: 20px; margin-top: 5px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); }
+
+        /* PREVIEW GAMBAR */
+        .img-preview-container {
+            display: none; 
+            gap: 20px; margin-top: 5px;
+            background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; 
+            border: 1px solid rgba(255,255,255,0.05);
+        }
         .preview-box { text-align: center; }
-        .preview-box img { height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 5px; background: #000; }
+        .preview-box img { 
+            height: 60px; object-fit: cover; border-radius: 8px; 
+            border: 1px solid rgba(255,255,255,0.2); margin-bottom: 5px; background: #000;
+        }
         .preview-box span { display: block; font-size: 11px; color: #777; }
-        .select-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; max-height: 250px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); }
+
+        /* SELECTION GRID */
+        .select-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; 
+            max-height: 250px; overflow-y: auto; 
+            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
         .select-item { position: relative; cursor: pointer; }
         .select-item input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
-        .select-item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; border: 2px solid transparent; opacity: 0.4; transition: 0.2s; filter: grayscale(80%); background: #1e1e1e; }
-        .select-item span { display: block; font-size: 11px; text-align: center; color: #666; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: 0.2s; }
-        .select-item input:checked + img { border-color: #fff; opacity: 1; filter: grayscale(0%); box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); transform: scale(1.05); }
+        .select-item img { 
+            width: 100%; aspect-ratio: 1/1; object-fit: cover;
+            border-radius: 8px; border: 2px solid transparent; 
+            opacity: 0.4; transition: 0.2s; filter: grayscale(80%);
+            background: #1e1e1e;
+        }
+        .select-item span { 
+            display: block; font-size: 11px; text-align: center; 
+            color: #666; margin-top: 4px; overflow: hidden; 
+            text-overflow: ellipsis; white-space: nowrap; transition: 0.2s;
+        }
+        .select-item input:checked + img { 
+            border-color: #fff; opacity: 1; filter: grayscale(0%);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
         .select-item input:checked ~ span { color: #fff; font-weight: bold; text-shadow: 0 0 5px #000; }
         .select-item:hover img { opacity: 0.8; }
+
+        /* TOMBOL ACTION */
         .actions { margin-top: 30px; display: flex; gap: 15px; }
-        button { flex: 1; background: #fff; color: #0c0f1d; padding: 14px; border: none; border-radius: 50px; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
+        button {
+            flex: 1; background: #fff; color: #0c0f1d;
+            padding: 14px; border: none; border-radius: 50px;
+            font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; transition: 0.3s;
+        }
         button:hover { background: #e2e8f0; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(255,255,255,0.2); }
-        .btn-cancel { flex: 0; min-width: 140px; text-align: center; display: flex; align-items: center; justify-content: center; background: transparent; color: #aaa; border: 1px solid rgba(255,255,255,0.2); text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 14px; }
+        .btn-cancel {
+            flex: 0; min-width: 140px; text-align: center; display: flex; align-items: center; justify-content: center;
+            background: transparent; color: #aaa; border: 1px solid rgba(255,255,255,0.2);
+            text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 14px;
+        }
         .btn-cancel:hover { background: rgba(255,255,255,0.05); color: #fff; border-color: #fff; }
+
     </style>
 </head>
 <body>
@@ -53,7 +154,6 @@
             <div class="form-group">
                 <label>Role</label>
                 <select name="role" required>
-                    <option value="" disabled selected>-- Select Role --</option>
                     <?php if(!empty($data['roles'])): ?>
                         <?php foreach($data['roles'] as $role) : ?>
                             <option value="<?= $role['name']; ?>"><?= $role['name']; ?></option>
@@ -104,7 +204,9 @@
             <label>Best Weapons (Select multiple)</label>
             <div class="select-grid">
                 <?php if(empty($data['weapons'])): ?>
-                    <p style="color: #666; font-size: 12px; grid-column: 1/-1; text-align: center;">No weapons data.</p>
+                    <p style="color: #666; font-size: 12px; grid-column: 1/-1; text-align: center;">
+                        No weapons data. Please add in <a href="<?= BASEURL; ?>/admin/master" style="color:#fff">Master Data</a>.
+                    </p>
                 <?php else: ?>
                     <?php foreach($data['weapons'] as $w) : ?>
                         <label class="select-item">
@@ -121,7 +223,9 @@
             <label>Best Artifacts (Select multiple)</label>
             <div class="select-grid">
                 <?php if(empty($data['artifacts'])): ?>
-                    <p style="color: #666; font-size: 12px; grid-column: 1/-1; text-align: center;">No artifacts data.</p>
+                    <p style="color: #666; font-size: 12px; grid-column: 1/-1; text-align: center;">
+                        No artifacts data. Add in Master Data.
+                    </p>
                 <?php else: ?>
                     <?php foreach($data['artifacts'] as $a) : ?>
                         <label class="select-item">
@@ -138,7 +242,9 @@
             <label>Best Teammates (Select other characters)</label>
             <div class="select-grid">
                 <?php if(empty($data['characters'])): ?>
-                    <p style="color: #666; font-size: 12px; grid-column: 1/-1; text-align: center;">No other characters available yet.</p>
+                    <p style="color: #666; font-size: 12px; grid-column: 1/-1; text-align: center;">
+                        No other characters available yet.
+                    </p>
                 <?php else: ?>
                     <?php foreach($data['characters'] as $c) : ?>
                         <label class="select-item">
