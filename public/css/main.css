@@ -45,14 +45,15 @@ main {
         padding: 0 20px;
     }
 }
+
 /* =========================================
-   4. HOME PAGE STYLES (Tambahan)
+   4. HOME PAGE STYLES
    ========================================= */
 
 /* Hero Section */
 .hero-section {
     text-align: center;
-    padding: 60px 0 40px; /* Atas Bawah Kiri Kanan */
+    padding: 60px 0 40px; 
     background-color: #fff;
     margin-bottom: 2rem;
     border-bottom: 1px solid #f1f5f9;
@@ -81,7 +82,6 @@ main {
 
 .category-grid {
     display: grid;
-    /* Grid otomatis: Minimal lebar 300px, kalau muat jejer ke samping */
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
 }
@@ -97,25 +97,42 @@ main {
     align-items: center;
     transition: all 0.3s ease;
     gap: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: none; /* Flat design */
 }
 
 .category-card:hover {
-    transform: translateY(-5px); /* Efek naik dikit */
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    transform: translateY(-5px); 
     border-color: #cbd5e1;
+    box-shadow: none;
 }
 
+/* Card Icon (SVG Style) */
 .card-icon {
-    font-size: 2.5rem;
-    /* Background bulat tipis di belakang icon */
-    background-color: #f8f9fa;
-    width: 60px;
-    height: 60px;
+    width: 56px;
+    height: 56px;
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    border-radius: 12px; 
+    color: #475569; 
+    transition: all 0.3s ease;
+}
+
+.card-icon svg {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.3s ease;
+}
+
+/* Hover Effects */
+.category-card:hover .card-icon {
+    background-color: transparent; 
+    color: #1a202c; 
+}
+
+.category-card:hover .card-icon svg {
+    transform: scale(1.15);
 }
 
 .card-content h3 {
@@ -132,7 +149,7 @@ main {
 }
 
 .card-arrow {
-    margin-left: auto; /* Dorong panah ke pojok kanan */
+    margin-left: auto;
     color: #94a3b8;
     font-size: 1.5rem;
     font-weight: 300;
@@ -140,6 +157,30 @@ main {
 }
 
 .category-card:hover .card-arrow {
-    transform: translateX(5px); /* Panah bergerak ke kanan saat hover */
+    transform: translateX(5px);
     color: #1a202c;
+}
+
+/* =========================================
+   5. EMPTY STATE STYLES (NEW)
+   ========================================= */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh; /* Mengambil 60% tinggi layar agar terlihat di tengah */
+    text-align: center;
+}
+
+.empty-state h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    color: #64748b;
+    font-size: 1.1rem;
 }
